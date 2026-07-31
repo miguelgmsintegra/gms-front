@@ -151,7 +151,8 @@ export function Contact() {
                         <SelectContent>
                           <SelectItem value="mampara">Mampara de baño</SelectItem>
                           <SelectItem value="ventana">Ventana de aluminio</SelectItem>
-                          <SelectItem value="cerramiento">Cerramiento</SelectItem>
+                          <SelectItem value="cerramiento">Cerramiento de terrazas</SelectItem>
+                          <SelectItem value="division">División de oficina</SelectItem>
                           <SelectItem value="otro">Otro</SelectItem>
                         </SelectContent>
                       </Select>
