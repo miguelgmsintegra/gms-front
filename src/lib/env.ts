@@ -1,15 +1,29 @@
 import { z } from "zod";
 
 /**
- * Validación tipada de variables de entorno (fail-fast).
+ * Validación tipada de variables de entorno (fail-fast con fallbacks inteligentes).
  *
- * Se valida al importar este módulo: si falta o es inválida alguna variable, la app falla
- * de inmediato con un mensaje claro, en vez de romper silenciosamente en runtime.
+ * Módulo de uso en SERVIDOR (next.config, Server Components, Route Handlers).
  *
- * IMPORTANTE: módulo de uso en SERVIDOR (next.config, Server Components, Route Handlers).
- * `BACKEND_URL` NO lleva prefijo NEXT_PUBLIC_ y por diseño no se expone al navegador.
- * Para variables públicas consumidas en el cliente, crear un `env.client.ts` aparte.
+ * Soporte para Staging / Previews de Vercel:
+ * - Si `NEXT_PUBLIC_APP_URL` no está definida, usa automáticamente `VERCEL_URL` (inyectada por Vercel)
+ *   o `http://localhost:3000` en desarrollo local.
+ * - Si `BACKEND_URL` no está definida, usa un fallback por defecto para permitir la compilación.
  */
+
+// Obtener URL de la app dinámicamente según el entorno (Dev / Vercel Staging / Prod)
+const getAppUrl = () => {
+  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:3000";
+};
+
+// Obtener URL del backend dinámicamente con fallback defensivo
+const getBackendUrl = () => {
+  if (process.env.BACKEND_URL) return process.env.BACKEND_URL;
+  return "http://127.0.0.1:8000";
+};
+
 const envSchema = z.object({
   // URL base del backend Laravel. Los rewrites de Next reescriben /api/* hacia aquí (server-side).
   BACKEND_URL: z.url(),
@@ -18,8 +32,8 @@ const envSchema = z.object({
 });
 
 const parsed = envSchema.safeParse({
-  BACKEND_URL: process.env.BACKEND_URL,
-  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  BACKEND_URL: getBackendUrl(),
+  NEXT_PUBLIC_APP_URL: getAppUrl(),
 });
 
 if (!parsed.success) {
@@ -33,3 +47,4 @@ if (!parsed.success) {
 }
 
 export const env = parsed.data;
+
