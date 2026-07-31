@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Cliente HTTP unificado para el ERP GMS Integra.
  *
