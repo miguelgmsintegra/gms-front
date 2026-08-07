@@ -37,10 +37,29 @@ const schema = z.object({
 type ContactValues = z.infer<typeof schema>;
 
 const contactInfo = [
-  { icon: MapPin, label: "Dirección", value: "Av. Ejemplo 1234, Lima" },
-  { icon: Phone, label: "Teléfono", value: "+51 999 999 999" },
-  { icon: Mail, label: "Email", value: "ventas@gmsintegra.com" },
-  { icon: Clock, label: "Horario", value: "Lun–Sáb · 9:00–18:00" },
+  {
+    icon: MapPin,
+    label: "Dirección",
+    value: "JR. HUANUCO NRO. 1389",
+    href: "https://maps.google.com/?q=JR.+HUANUCO+NRO.+1389,+Huancayo,+Junin,+Peru",
+  },
+  {
+    icon: Phone,
+    label: "Teléfono",
+    value: "958 413 806",
+    href: "tel:+51958413806",
+  },
+  {
+    icon: Mail,
+    label: "Email",
+    value: "gmsintegra21@gmail.com",
+    href: "mailto:gmsintegra21@gmail.com",
+  },
+  {
+    icon: Clock,
+    label: "Horario",
+    value: "Lun–Sáb · 9:00–18:00",
+  },
 ];
 
 export function Contact() {
@@ -75,18 +94,55 @@ export function Contact() {
             </p>
           </div>
           <ul className="flex flex-col gap-4">
-            {contactInfo.map((c) => (
-              <li key={c.label} className="flex items-center gap-3">
-                <span className="bg-muted text-primary flex size-10 items-center justify-center rounded-md border">
-                  <c.icon className="size-5" />
-                </span>
-                <div>
-                  <p className="text-muted-foreground text-xs">{c.label}</p>
-                  <p className="font-medium">{c.value}</p>
+            {contactInfo.map((c) => {
+              const content = (
+                <div className="flex items-center gap-3 w-full">
+                  <span className="bg-muted text-primary flex size-10 shrink-0 items-center justify-center rounded-md border transition-all duration-300 group-hover:border-primary/50 group-hover:bg-primary/5 group-hover:text-brand">
+                    <c.icon className="size-5 transition-transform duration-300 group-hover:scale-110" />
+                  </span>
+                  <div>
+                    <p className="text-muted-foreground text-xs">{c.label}</p>
+                    <p className="font-medium text-foreground transition-colors group-hover:text-primary">{c.value}</p>
+                  </div>
                 </div>
-              </li>
-            ))}
+              );
+
+              if (c.href) {
+                return (
+                  <li key={c.label}>
+                    <a
+                      href={c.href}
+                      target={c.label === "Dirección" ? "_blank" : undefined}
+                      rel={c.label === "Dirección" ? "noopener noreferrer" : undefined}
+                      className="group flex w-full cursor-pointer"
+                    >
+                      {content}
+                    </a>
+                  </li>
+                );
+              }
+
+              return (
+                <li key={c.label} className="flex group">
+                  {content}
+                </li>
+              );
+            })}
           </ul>
+
+          {/* Mapa de Ubicación */}
+          <div className="mt-2 overflow-hidden rounded-xl border border-border shadow-md transition-all duration-300 hover:shadow-lg hover:border-primary/20">
+            <iframe
+              src="https://maps.google.com/maps?q=JR.+HUANUCO+NRO.+1389,+Huancayo,+Junin,+Peru&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="220"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="grayscale contrast-[0.9] hover:grayscale-0 transition-all duration-500"
+            />
+          </div>
         </div>
 
         {/* Formulario */}
