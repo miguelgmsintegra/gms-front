@@ -3,6 +3,7 @@ import { Bath, Grid, Expand, Building2, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { SectionHeader } from "@/components/ui/section-header";
 
 import imgMamparaBano from "@/assets/mampara_bano.jpg";
 import imgVentanaAluminio from "@/assets/ventana_aluminio.jpg";
@@ -70,18 +71,13 @@ export function Products() {
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-20" aria-hidden />
 
       <div className="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-        {/* Encabezado de la sección */}
-        <div className="flex flex-col items-center gap-3 text-center">
-          <Badge variant="outline" className="bg-card/80 backdrop-blur">
-            Nuestros Productos
-          </Badge>
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Soluciones en <span className="text-gradient-brand font-bold">Aluminio y Vidrio</span>
-          </h2>
-          <p className="text-muted-foreground max-w-xl text-lg text-balance">
-            Fabricamos a medida con los más altos estándares de precisión, durabilidad y estética moderna.
-          </p>
-        </div>
+        {/* Encabezado de la sección unificado */}
+        <SectionHeader
+          badgeText="Nuestros Productos"
+          title="Soluciones en"
+          highlightTitle="Aluminio y Vidrio"
+          description="Fabricamos a medida con los más altos estándares de precisión, durabilidad y estética moderna."
+        />
 
         {/* Grilla de productos */}
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -90,50 +86,50 @@ export function Products() {
             return (
               <Card 
                 key={p.title} 
-                className="group relative flex flex-col justify-between overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg"
+                className="group relative flex flex-col justify-between overflow-hidden border border-border/80 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md"
               >
-                {/* Línea decorativa superior que brilla al hover */}
-                <div className="absolute top-0 left-0 h-[2px] w-full bg-border transition-colors duration-300 group-hover:bg-gradient-brand z-10" />
+                {/* Línea decorativa superior en color azul sólido de marca */}
+                <div className="absolute top-0 left-0 h-[3px] w-full bg-border transition-colors duration-300 group-hover:bg-primary z-10" />
 
                 {/* Contenedor de Imagen de Producto */}
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
                   <Image
                     src={p.image}
-                    alt={p.title}
+                    alt={`${p.title} de aluminio y vidrio templado en Huancayo y Valle del Mantaro - GMS Integra`}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-85" />
                   
-                  {/* Badge Flotante */}
+                  {/* Badge Flotante Sólido */}
                   <div className="absolute top-3 right-3">
-                    <Badge variant="secondary" className="glass border-white/10 text-white text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 shadow-sm">
+                    <Badge variant="brand" className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 shadow-xs">
                       {p.badge}
                     </Badge>
                   </div>
 
                   {/* Icono Flotante */}
-                  <div className="absolute bottom-3 left-3 bg-white/95 text-primary flex size-9 items-center justify-center rounded-lg border border-white/20 shadow-md backdrop-blur">
+                  <div className="absolute bottom-3 left-3 bg-white text-primary flex size-9 items-center justify-center rounded-lg border border-border shadow-xs">
                     <Icon className="size-4.5 transition-transform duration-300 group-hover:scale-110" />
                   </div>
                 </div>
 
                 <CardHeader className="flex flex-col gap-1.5 pt-4 px-5">
-                  <CardTitle className="text-lg font-semibold tracking-tight">
+                  <CardTitle className="text-base font-bold uppercase tracking-wider text-foreground">
                     {p.title}
                   </CardTitle>
-                  <CardDescription className="text-muted-foreground text-xs leading-relaxed min-h-[40px] line-clamp-2">
+                  <CardDescription className="text-muted-foreground text-xs leading-relaxed min-h-[40px] line-clamp-2 normal-case font-normal">
                     {p.description}
                   </CardDescription>
                 </CardHeader>
 
                 <CardContent className="flex-1 px-5">
                   <div className="border-t pt-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary/80">Características principales:</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Características principales:</span>
                     <ul className="flex flex-col gap-2 mt-2">
                       {p.features.map((feature, i) => (
-                        <li key={i} className="text-muted-foreground flex items-start gap-2 text-xs">
+                        <li key={i} className="text-muted-foreground flex items-start gap-2 text-xs normal-case font-normal">
                           <span className="text-primary mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
                           <span>{feature}</span>
                         </li>
@@ -143,10 +139,14 @@ export function Products() {
                 </CardContent>
 
                 <CardFooter className="pt-2 px-5 pb-4">
-                  <Button variant="ghost" className="hover:text-primary group/btn w-full justify-between px-2 text-xs font-semibold" asChild>
-                    <a href="#contacto">
-                      Cotizar ahora
-                      <ArrowRight className="size-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                  <Button variant="brand" className="group/btn w-full justify-between text-xs font-bold uppercase tracking-wider h-9 rounded-lg shadow-sm" asChild>
+                    <a
+                      href={`https://wa.me/51958413806?text=${encodeURIComponent(`Hola GMS Integra, desearía solicitar una cotización para: ${p.title}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Cotizar por WhatsApp
+                      <ArrowRight className="size-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
                     </a>
                   </Button>
                 </CardFooter>

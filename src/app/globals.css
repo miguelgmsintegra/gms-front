@@ -145,6 +145,22 @@
   backdrop-filter: blur(12px) saturate(1.5);
   -webkit-backdrop-filter: blur(12px) saturate(1.5);
 }
+@utility glass-card {
+  background-color: color-mix(in oklab, var(--card) 85%, transparent);
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+  box-shadow:
+    0 1px 3px 0 oklch(0.2 0.02 258 / 0.05),
+    0 12px 32px -12px oklch(0.2 0.05 258 / 0.12);
+}
+@utility glass-button {
+  background-color: color-mix(in oklab, var(--card) 75%, transparent);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid color-mix(in oklab, var(--primary) 22%, transparent);
+  box-shadow: 0 4px 16px -4px oklch(0.45 0.08 258 / 0.12);
+}
 @utility shadow-glass {
   box-shadow:
     0 1px 2px -1px oklch(0.45 0.05 258 / 0.1),
@@ -205,14 +221,26 @@
   80% { transform: translate(-40px, -50px) scale(1.15); }
 }
 
+/* El movimiento se detiene para quien ha pedido menos animación en su sistema: son
+   superficies enormes y desenfocadas, justo el tipo de movimiento periférico que
+   provoca mareo a quien es sensible a él. La composición de color no cambia. */
 @utility animate-aurora-1 {
   animation: aurora-blob-1 25s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 @utility animate-aurora-2 {
   animation: aurora-blob-2 30s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 @utility animate-aurora-3 {
   animation: aurora-blob-3 28s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }

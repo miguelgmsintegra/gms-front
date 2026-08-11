@@ -25,11 +25,11 @@ const socials = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-secondary/40">
-      <div className="bg-gradient-brand h-1 w-full" />
+    <footer className="bg-secondary/40 border-t">
+      <div className="bg-primary h-1 w-full" />
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
         <div className="flex flex-col gap-3">
-          <Image src={logo} alt="GMS Integra" className="size-16" />
+          <Image src={logo} alt="GMS Integra - Ventanas y Mamparas de Aluminio en Huancayo" className="size-16" />
           <p className="text-muted-foreground max-w-xs text-sm">
             Diseño, fabricación e instalación de mamparas y ventanas de aluminio con acabados de
             precisión.
