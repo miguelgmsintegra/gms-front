@@ -9,17 +9,20 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/80",
+        default:
+          "bg-primary text-primary-foreground hover:bg-[#003882] shadow-sm font-semibold transition-all duration-200 active:scale-[0.98]",
         brand:
-          "bg-gradient-brand text-white shadow-glass hover:brightness-110 focus-visible:ring-primary/40",
+          "bg-primary text-white hover:bg-[#003882] shadow-md font-semibold transition-all duration-200 active:scale-[0.98]",
+        glass:
+          "bg-white/90 text-foreground border border-border hover:border-primary/40 hover:bg-white transition-all duration-200 font-medium shadow-sm",
         outline:
-          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+          "border-border bg-background hover:bg-muted hover:text-foreground hover:border-primary/40 transition-all duration-200 font-medium",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all duration-200 font-medium",
         ghost:
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+          "hover:bg-muted hover:text-foreground transition-all duration-200 font-medium",
         destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-all duration-200 font-semibold shadow-sm",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

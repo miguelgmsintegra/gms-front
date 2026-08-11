@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import { SectionHeader } from "@/components/ui/section-header";
 import {
   Accordion,
   AccordionItem,
@@ -35,17 +35,14 @@ const faqs = [
 
 export function Faq() {
   return (
-    <section id="faq" className="border-b">
+    <section id="faq" className="border-b bg-secondary/10">
       <div className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
-        <div className="flex flex-col items-center gap-3 text-center">
-          <Badge variant="outline">Preguntas frecuentes</Badge>
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Resolvemos tus dudas
-          </h2>
-          <p className="text-muted-foreground max-w-xl text-balance">
-            Todo lo que necesitas saber antes de iniciar tu proyecto en aluminio y vidrio.
-          </p>
-        </div>
+        <SectionHeader
+          badgeText="Preguntas frecuentes"
+          title="Resolvemos"
+          highlightTitle="tus dudas"
+          description="Todo lo que necesitas saber antes de iniciar tu proyecto en aluminio y vidrio."
+        />
 
         <Accordion type="single" collapsible className="mt-10 w-full">
           {faqs.map((f, i) => (

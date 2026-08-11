@@ -5,6 +5,7 @@ import { Series } from "@/components/landing/series";
 import { Faq } from "@/components/landing/faq";
 import { Contact } from "@/components/landing/contact";
 import { SiteFooter } from "@/components/landing/site-footer";
+import { FloatingCta } from "@/components/landing/floating-cta";
 
 export default function HomePage() {
   return (
@@ -18,6 +19,7 @@ export default function HomePage() {
         <Contact />
       </main>
       <SiteFooter />
+      <FloatingCta />
     </>
   );
 }

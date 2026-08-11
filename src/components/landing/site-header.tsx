@@ -84,7 +84,7 @@ function Logo({ className, scrolled }: { className?: string; scrolled: boolean }
     >
       <Image 
         src={logo} 
-        alt="GMS Integra" 
+        alt="GMS Integra - Ventanas y Mamparas de Aluminio en Huancayo" 
         priority 
         className={cn(
           "transition-all duration-500 object-contain", // Logo original sin filtros de color
@@ -146,7 +146,7 @@ export function SiteHeader() {
                 href="https://www.facebook.com/profile.php?id=100089261427668"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary hover:text-white hover:bg-gradient-brand flex size-8.5 items-center justify-center rounded-full border border-border bg-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_10px_rgba(0,74,173,0.2)]"
+                className="text-primary hover:text-white hover:bg-primary flex size-8.5 items-center justify-center rounded-full border border-border bg-white transition-all duration-300 hover:scale-105 hover:shadow-sm"
                 title="Facebook GMS Integra"
               >
                 <FacebookIcon className="size-4" />
@@ -155,7 +155,7 @@ export function SiteHeader() {
                 href="https://www.instagram.com/gms_integra"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary hover:text-white hover:bg-gradient-brand flex size-8.5 items-center justify-center rounded-full border border-border bg-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_10px_rgba(0,74,173,0.2)]"
+                className="text-primary hover:text-white hover:bg-primary flex size-8.5 items-center justify-center rounded-full border border-border bg-white transition-all duration-300 hover:scale-105 hover:shadow-sm"
                 title="Instagram gms_integra"
               >
                 <InstagramIcon className="size-4" />
@@ -164,7 +164,7 @@ export function SiteHeader() {
                 href="https://www.tiktok.com/@GMS_INTEGRA"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary hover:text-white hover:bg-gradient-brand flex size-8.5 items-center justify-center rounded-full border border-border bg-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_10px_rgba(0,74,173,0.2)]"
+                className="text-primary hover:text-white hover:bg-primary flex size-8.5 items-center justify-center rounded-full border border-border bg-white transition-all duration-300 hover:scale-105 hover:shadow-sm"
                 title="TikTok GMS_INTEGRA"
               >
                 <TiktokIcon className="size-4" />
