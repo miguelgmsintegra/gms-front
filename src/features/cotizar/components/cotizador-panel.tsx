@@ -1,0 +1,163 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { AlertTriangle, Info, LayoutTemplate } from "lucide-react";
+
+import { EmptyState } from "@/components/comunes/empty-state";
+import { PanelError } from "@/components/comunes/panel-error";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { BarraControles } from "@/features/cotizar/components/barra-controles";
+import { ResultadoCalculo } from "@/features/cotizar/components/resultado-calculo";
+import type { Despiece, RespuestaError, Tipo } from "@/features/cotizar/types";
+
+/**
+ * Panel del cotizador.
+ *
+ * ⚠️ Este componente NO calcula nada. Envía medidas y dibuja la respuesta. Duplicar aquí
+ * una sola fórmula significaría, en unos meses, dos motores que no coinciden y aluminio
+ * cortado según el que se equivocó (PC-GMS-006).
+ */
+export function CotizadorPanel({
+  tipos,
+  puedeVerDinero,
+}: {
+  tipos: Tipo[];
+  puedeVerDinero: boolean;
+}) {
+  const [tipoId, setTipoId] = useState<string>(tipos[0]?.id ?? "");
+  const [ancho, setAncho] = useState<string>(String(tipos[0]?.ancho_default ?? 300));
+  const [alto, setAlto] = useState<string>(String(tipos[0]?.alto_default ?? 170));
+
+  const [resultado, setResultado] = useState<Despiece | null>(null);
+  const [errores, setErrores] = useState<RespuestaError | null>(null);
+  const [calculando, iniciarCalculo] = useTransition();
+
+  /** Pieza aislada en el plano. Vive aquí porque la comparten la lista y el dibujo. */
+  const [insumoResaltado, setInsumoResaltado] = useState<string | null>(null);
+
+  /**
+   * Al cambiar de tipo se proponen sus medidas de referencia del cuaderno y se descarta
+   * el resultado anterior, que ya no corresponde. Se hace en el manejador y no en un
+   * efecto: es una reacción a una acción del usuario, no una sincronización con un
+   * sistema externo.
+   */
+  function seleccionarTipo(nuevoTipoId: string) {
+    const nuevoTipo = tipos.find((t) => t.id === nuevoTipoId);
+
+    setTipoId(nuevoTipoId);
+    setAncho(String(nuevoTipo?.ancho_default ?? 300));
+    setAlto(String(nuevoTipo?.alto_default ?? 170));
+    setResultado(null);
+    setErrores(null);
+    setInsumoResaltado(null);
+  }
+
+  function calcular() {
+    if (!tipoId) return;
+
+    iniciarCalculo(async () => {
+      setErrores(null);
+
+      const respuesta = await fetch(`/api/v1/tipos/${tipoId}/calcular`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ancho: Number(ancho), alto: Number(alto) }),
+      });
+
+      const datos = await respuesta.json().catch(() => null);
+
+      if (!respuesta.ok) {
+        setResultado(null);
+        setErrores(
+          datos ?? {
+            error: "ERROR",
+            detalles: [
+              { campo: null, codigo: "ERROR", mensaje: "No se pudo calcular." },
+            ],
+          },
+        );
+
+        return;
+      }
+
+      setResultado(datos as Despiece);
+    });
+  }
+
+  if (tipos.length === 0) {
+    return (
+      <EmptyState
+        icono={LayoutTemplate}
+        titulo="Todavía no hay nada que cotizar"
+        descripcion="Cotizar parte de un tipo ya publicado. El maestro de taller debe crear y publicar al menos uno en Plantillas."
+      />
+    );
+  }
+
+  const advertencias = resultado?.advertencias ?? [];
+
+  return (
+    <div className="flex min-h-0 flex-1 flex-col gap-4">
+      <BarraControles
+        tipos={tipos}
+        tipoId={tipoId}
+        ancho={ancho}
+        alto={alto}
+        calculando={calculando}
+        alCambiarTipo={seleccionarTipo}
+        alCambiarAncho={setAncho}
+        alCambiarAlto={setAlto}
+        alCalcular={calcular}
+      />
+
+      {advertencias.length > 0 ? (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" size="sm" className="text-muted-foreground self-start">
+              <AlertTriangle className="text-primary size-4" />
+              {advertencias.length === 1
+                ? "1 advertencia del motor"
+                : `${advertencias.length} advertencias del motor`}
+            </Button>
+          </PopoverTrigger>
+
+          <PopoverContent align="start" className="w-96">
+            <ul className="flex flex-col gap-3">
+              {advertencias.map((advertencia, indice) => (
+                <li key={indice} className="flex gap-2.5 text-sm">
+                  {advertencia.nivel === "warn" ? (
+                    <AlertTriangle className="text-primary mt-0.5 size-4 shrink-0" />
+                  ) : (
+                    <Info className="text-muted-foreground mt-0.5 size-4 shrink-0" />
+                  )}
+                  <p className="text-muted-foreground">{advertencia.mensaje}</p>
+                </li>
+              ))}
+            </ul>
+          </PopoverContent>
+        </Popover>
+      ) : null}
+
+      {errores ? <PanelError error={errores} /> : null}
+
+      {resultado ? (
+        <ResultadoCalculo
+          despiece={resultado}
+          puedeVerDinero={puedeVerDinero}
+          insumoResaltado={insumoResaltado}
+          alResaltar={setInsumoResaltado}
+        />
+      ) : errores ? null : (
+        <p className="text-muted-foreground flex flex-1 items-center justify-center gap-2 py-16 text-sm">
+          <Info className="size-4" />
+          Escriba las medidas del vano y presione «Calcular».
+        </p>
+      )}
+    </div>
+  );
+}

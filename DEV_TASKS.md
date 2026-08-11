@@ -50,6 +50,33 @@
 * [x] Task 34: Moderar gradiente hacia geometría (evitar cliché IA) — hero sin blobs, paneles de vidrio, stats/CTA sólidos | `hero.tsx`, `contact.tsx` | [BAJO] | ✅
 * [x] Task 35: VALIDATE — lint + build en verde | `gms-front/` | [BAJO] | ✅
 
+## <SESIÓN 7 — Cimientos UI del ERP>
+* [x] Task 36: `formato.ts` — numero/medida/moneda/porcentaje/plural con locale es-PE | `lib/formato.ts` | [BAJO] | ✅
+* [x] Task 37: Primitivas `comunes/`: PageHeader · EmptyState · PanelError · StatTile · FilaMonto · TerminoTecnico | `components/comunes/` | [BAJO] | ✅
+* [x] Task 38: **Sistema de color por familia funcional** — 3 familias validadas (CVD ΔE 9,2 · normal 27,6) + LeyendaFamilias | `lib/catalogo-visual.ts` | [MEDIO] | ✅
+* [x] Task 39: `VentanaSVG` con `modoColor` función/acabado; color de familia en plano, tira y compositor | `features/` | [MEDIO] | ✅
+* [x] Task 40: Sidebar **riel** 56px→224px al hover/foco, superpuesto (no empuja) | `erp-sidebar.tsx` | [MEDIO] | ✅
+* [x] Task 41: Navegación móvil por Sheet en el topbar (cierra el hueco de 375px) | `erp-topbar.tsx` | [MEDIO] | ✅
+* [x] Task 42: `navegacion.ts` con `disponible` — se acaban los 3 enlaces a 404 | `navegacion.ts` | [BAJO] | ✅
+* [x] Task 43: Home del ERP en `/inicio` (los 3 pasos del negocio) + login y proxy apuntando ahí | `app/(erp)/inicio/` | [MEDIO] | ✅
+* [x] Task 44: Boundaries `loading` · `error` (Next 16: `unstable_retry`) · `not-found` | `app/(erp)/` | [BAJO] | ✅
+* [x] Task 45: Resultado del cálculo reordenado: plano y total primero, detalle en pestañas | `resultado-calculo.tsx` | [MEDIO] | ✅
+* [x] Task 46: Compositor movido a diálogo; `/plantillas` es repositorio | `dialogo-nuevo-tipo.tsx` | [MEDIO] | ✅
+* [x] Task 47: Eliminado `lib/api.ts` (95 líneas sin usar); fondo del ERP opaco | `lib/`, `(erp)/layout.tsx` | [BAJO] | ✅
+* [x] Task 48: VALIDATE — lint 0 errores · build 10 rutas en verde | `gms-front/` | [BAJO] | ✅
+
+## <SESIÓN 8 — El cotizador como taller CAD>
+* [x] Task 49: **Color por insumo** — paleta de 16 tonos + mapa explícito de los 21 códigos del catálogo + respaldo por hash | `lib/catalogo-visual.ts` | [MEDIO] | ✅
+* [x] Task 50: `familiaDe()` deja de pintar y pasa a AGRUPAR la lista de perfiles | `lib/catalogo-visual.ts` | [BAJO] | ✅
+* [x] Task 51: `VentanaSVG` con `insumoResaltado` — halo y grosor en la pieza aislada, gris tenue en el resto | `ventana-svg.tsx` | [MEDIO] | ✅
+* [x] Task 52: `PanelPerfiles` — lista agrupada por función; clic aísla, segundo clic suelta; plano al lado | `panel-perfiles.tsx` | [MEDIO] | ✅
+* [x] Task 53: Fuera `ErpTopbar`; identidad y cierre de sesión al pie del riel | `erp-sidebar.tsx` | [MEDIO] | ✅
+* [x] Task 54: `ErpBarraMovil` — solo por debajo de `md`, donde el riel no existe | `erp-barra-movil.tsx` | [MEDIO] | ✅
+* [x] Task 55: `BarraControles` fija — tipo, ancho, alto y calcular en una fila | `barra-controles.tsx` | [MEDIO] | ✅
+* [x] Task 56: Seis pestañas (Modelo · Medidas · Perfiles · Despiece · Compra · Costeo), Modelo por defecto | `resultado-calculo.tsx` | [MEDIO] | ✅
+* [x] Task 57: Cotizador sin `PageHeader`; advertencias en popover con contador | `cotizar/nueva/page.tsx`, `cotizador-panel.tsx` | [BAJO] | ✅
+* [x] Task 58: VALIDATE — lint 0 errores · build 10 rutas en verde | `gms-front/` | [BAJO] | ✅
+
 ---
 
 ## <NOTAS_Y_DECISIONES>
@@ -61,9 +88,41 @@
 * **Paleta:** monocromática azul→cian. `#004AAD`≈`#0049AF` (near-duplicados). Falta color funcional (success/warning/error) → propuesto en el md, pendiente de aprobar.
 * **Memory Vite→Next:** las guías `dreamdev/memory/frontend` son para Vite (server.proxy, import.meta.env). Adaptado a Next (rewrites, process.env). Pendiente actualizar los .md de memory.
 
+## <DECISIONES DE LA SESIÓN 7>
+* **El color codifica TRES familias, no siete.** Se intentó una por familia de insumo y el validador lo tumbó: naranja↔rojo quedan a ΔE 7,1 en visión normal (piso 15) y verde↔naranja a 3,2 en protanopía. En un plano todas las piezas coexisten, así que rige el criterio `--pairs all`, más estricto. Las tres que sí pasan resultaron ser la distinción que define el producto: estructura fija · hoja corrediza · guía. El resto va en gris y se identifica por tabla y posición.
+* **`color_hex` del catálogo NO es un código de identificación:** es el ACABADO del aluminio, y por eso los 10 perfiles son grises casi iguales con 4 pares idénticos. No es un error del seeder. Conviven como `modoColor="funcion"` (clasifica) y `modoColor="acabado"` (retrata).
+* **Las auroras del layout raíz NO eran código muerto**, como suponía el plan: son 6 blobs animados activos. Se dejan en la landing —es su identidad— y el ERP se apoya en fondo opaco. Se les añadió respeto a `prefers-reduced-motion`.
+* **Home del ERP en `/inicio`, no en `/`:** `app/page.tsx` (landing) y `app/(erp)/page.tsx` colisionarían en la misma ruta.
+* **Next 16 rompe `error.tsx`:** el segundo parámetro es `unstable_retry`, no `reset`.
+* **El menú muestra el mapa completo desde el día uno**, con lo no construido inerte y rotulado «Pronto». Prometer una pantalla y devolver 404 cuesta más confianza que admitir que falta.
+
+## <SESIÓN 9 — El color y los límites salen de la DB>
+* [x] Task 59: Eliminado `COLOR_POR_CODIGO` del front — duplicaba el catálogo en TypeScript | `lib/catalogo-visual.ts` | [MEDIO] | ✅
+* [x] Task 60: `color` y `limites` en los tipos; el front solo pinta lo que recibe | `features/cotizar/types.ts` | [BAJO] | ✅
+* [x] Task 61: **Oclusión resuelta** — la pieza aislada se redibuja en la capa superior con extremos marcados | `ventana-svg.tsx` | [MEDIO] | ✅
+* [x] Task 62: Inputs con feedback: los duros bloquean «Calcular», los 🔶 solo avisan | `barra-controles.tsx` | [MEDIO] | ✅
+* [x] Task 63: Medidas de corte por pieza en la pestaña Perfiles («4 × 140 cm») + cotas restauradas | `panel-perfiles.tsx` | [BAJO] | ✅
+* [x] Task 64: VALIDATE — lint 0 errores · build 10 rutas en verde | `gms-front/` | [BAJO] | ✅
+
+## <DECISIONES DE LA SESIÓN 9>
+* **El color se GENERA en el backend a partir del catálogo real** (`App\Servicios\PaletaInsumos`), no se elige a mano. Con N insumos el círculo de tono se divide en N: unicidad garantizada y un perfil nuevo entra sin tocar código. Verificado por test.
+* **La luminosidad se corrige midiendo contraste WCAG, no por tramos.** Una luminosidad HSL fija daba `8115 = #9cdb43`, un lima que se pierde sobre papel blanco: el ojo pesa el verde seis veces más que el azul. Ahora se oscurece en pasos hasta superar 3:1 y quedó `#6da31f`.
+* **El color NO se persiste.** No es dato de negocio —nadie decide que el 8115 «sea rojo»— sino consecuencia de cuántos insumos hay. `color_hex` sigue significando el ACABADO del aluminio y viaja aparte como `color_acabado`.
+* **Dos clases de límite, y la interfaz las distingue.** Duros (ancho ≤ barra sin empalme, alto > puente) bloquean el botón porque el motor los rechazaría igual. Los de `series` están marcados 🔶 «deducido, pendiente de confirmar en taller» y **ningún código los aplicaba**: solo avisan. El día que el taller los confirme, cambia el dato, no el código.
+* **Oclusión: dos pasadas de dibujo.** La pieza aislada se saca de la lista y se repinta al final, así que nada la tapa aunque comparta línea con otra (3210 y 5415 van ambos sobre el puente). Sus extremos se marcan con círculos, que es lo único que distingue dónde empieza y acaba cuando dos perfiles se superponen.
+* **`preventLazyLoading` estuvo a punto de romper el listado:** exponer `limites` obliga a `diseno.serie`, y los controllers solo cargaban `diseno`.
+
+## <DECISIONES DE LA SESIÓN 8>
+* **Un color por insumo, con su límite medido.** La paleta de 16 tonos se validó sobre los 120 pares: ✓ los 16 superan 3:1 de contraste sobre blanco, ✓ todos caen en banda de luminosidad y croma, ✗ el peor par en visión normal queda en ΔE 4,5 (piso 15) y ✗ en protanopía en ΔE 0,4. Con 16 colores repartidos en la rueda la separación media es de 22° y **ninguna ordenación salva los 120 pares** — es aritmética del espacio de color, no un defecto de esta paleta. Conclusión operativa: **el color sirve para reconocer, no para verificar.**
+* **El aislamiento es el mecanismo de verificación.** La pestaña Perfiles apaga todo menos la pieza elegida. Responde «¿dónde va el 8115?» sin pedirle al ojo que separe catorce tonos, y sigue funcionando con un catálogo de cuarenta insumos y para quien no distingue rojo de verde.
+* **Los colores se asignan a mano, no por orden de aparición.** Si dependieran del orden en el despiece, el mismo perfil cambiaría de color entre tipos y la memoria visual dejaría de servir. El 8115 es rojo en todas las ventanas.
+* **Aislar con clic, no con hover.** En la tablet del taller no hay puntero, y así el aislamiento se queda fijo mientras se compara con la pieza real en la mano.
+* **La barra superior de escritorio desaparece:** gastaba 56px de alto a lo ancho de la pantalla para un nombre y un rol que no cambian nunca. Por debajo de `md` la sustituye `ErpBarraMovil`, que sí es navegación imprescindible.
+* **El cotizador no lleva `PageHeader`.** Inicio y Plantillas lo conservan: son páginas de navegación. El cotizador es de trabajo continuo y todo lo que aparezca sobre el modelo debe ganarse el sitio.
+
 ## <PENDIENTE PRÓXIMA SESIÓN>
-* Componente de toggle de tema (usa el `data-theme` ya soportado en `globals.css`).
-* Estructura de carpetas del ERP: `components/ui` (tontos), `features/` (inteligentes), `lib/api.ts`.
-* Colores funcionales: falta validar contraste WCAG en usos reales (texto sobre warning/accent).
-* Server-state: instalar TanStack Query al construir la 1ª feature con datos.
-* Subir a repo de GitHub (primer commit + remote).
+* **Selector de diseño en `/plantillas`:** hoy sigue mostrando solo `disenos[0]`. Con un segundo diseño, la página tapará uno sin avisar. Requiere decidir el criterio de clasificación con el taller.
+* **Catálogo de materiales (full-stack):** `GET /v1/insumos`, `PATCH /insumos/{id}/precio`, `GET /insumos/{id}/uso`. Desbloquea el costeo real — hoy todo material vale S/ 0,00.
+* Cotización persistida: los modelos `Cotizacion`/`CotizacionItem` y su Policy existen sin endpoints ni pantalla.
+* Server-state: instalar TanStack Query al construir la 1ª feature con mutaciones frecuentes.
+* Primer commit del ERP + remote GitHub (todo `(erp)/`, `features/`, `lib/session.ts` sigue sin versionar).
