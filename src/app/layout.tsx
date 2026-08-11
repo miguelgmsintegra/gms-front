@@ -73,7 +73,7 @@ export const metadata: Metadata = {
       "Diseño, fabricación e instalación a medida de ventanas y mamparas de vidrio templado, fachadas integrales y acabados arquitectónicos en Huancayo y el Valle del Mantaro.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "GMS Integra - Ventanas y Mamparas de Aluminio en Huancayo",
@@ -85,7 +85,7 @@ export const metadata: Metadata = {
     title: "GMS Integra — Ventanas y Mamparas de Aluminio en Huancayo",
     description:
       "Especialistas en ventanas, mamparas, fachadas integrales, puertas y techos en todo el Valle del Mantaro.",
-    images: ["/opengraph-image"],
+    images: ["/og-image.png"],
   },
   other: {
     "geo.region": "PE-JUN",
