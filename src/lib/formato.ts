@@ -6,7 +6,7 @@
  * debe verse «1 120,5». Cuando cada componente formatea a su manera, la misma cifra
  * aparece distinta en el despiece y en el costeo, y quien compara las dos hojas duda.
  *
- * ⚠️ Esto es PRESENTACIÓN, no cálculo. Aquí no se redondea para operar después: se
+ * [AVISO] Esto es PRESENTACIÓN, no cálculo. Aquí no se redondea para operar después: se
  * redondea para mostrar. El único que calcula es el motor en PHP (PC-GMS-006).
  */
 
