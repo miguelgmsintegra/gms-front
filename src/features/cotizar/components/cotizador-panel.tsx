@@ -18,7 +18,7 @@ import type { Despiece, RespuestaError, Tipo } from "@/features/cotizar/types";
 /**
  * Panel del cotizador.
  *
- * ⚠️ Este componente NO calcula nada. Envía medidas y dibuja la respuesta. Duplicar aquí
+ * [AVISO] Este componente NO calcula nada. Envía medidas y dibuja la respuesta. Duplicar aquí
  * una sola fórmula significaría, en unos meses, dos motores que no coinciden y aluminio
  * cortado según el que se equivocó (PC-GMS-006).
  */

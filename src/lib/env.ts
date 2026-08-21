@@ -38,7 +38,7 @@ const parsed = envSchema.safeParse({
 
 if (!parsed.success) {
   console.error(
-    "❌ Variables de entorno inválidas o faltantes:\n",
+    "[ERROR] Variables de entorno inválidas o faltantes:\n",
     z.flattenError(parsed.error).fieldErrors,
   );
   throw new Error(

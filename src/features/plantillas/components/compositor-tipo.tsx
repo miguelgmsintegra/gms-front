@@ -21,7 +21,7 @@ import type { RespuestaError } from "@/features/cotizar/types";
  * El maestro alterna F↔D con un clic y el tipo nace calculable, heredando las reglas
  * del diseño.
  *
- * ⚠️ Este componente NO deriva NADA de la composición —ni bloques, ni juntas, ni
+ * [AVISO] Este componente NO deriva NADA de la composición —ni bloques, ni juntas, ni
  * carriles— aunque en JavaScript sería trivial. Toda variable derivada vive en el motor
  * (PC-GMS-006). Aquí solo se edita una secuencia de letras.
  */

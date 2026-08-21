@@ -1,9 +1,10 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
-import { Layers, ShieldCheck, Maximize, Landmark, Volume2, ArrowRight } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Layers, ShieldCheck, Maximize, Landmark, Volume2, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SectionHeader } from "@/components/ui/section-header";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 import imgSerie20 from "@/assets/serie_20.jpg";
 import imgVentanaAluminio from "@/assets/ventana_aluminio.jpg";
@@ -11,207 +12,301 @@ import imgDivisionesOficina from "@/assets/divisiones_oficina.jpg";
 import imgHeroWindow from "@/assets/hero-window.jpg";
 import imgCerramientoTerraza from "@/assets/cerramiento_terraza.jpg";
 
-const seriesList = [
+const seriesData = [
   {
+    id: "s20",
     code: "S-20",
-    name: "Serie 20",
+    name: "Serie 20 Clásica",
     category: "Residencial Ligero",
+    tagline: "El estándar corredizo más accesible y eficiente para vanos estándar",
     icon: Layers,
-    description: "El sistema corredizo clásico más utilizado para ventanas y mamparas ligeras. Solución versátil y funcional de instalación rápida.",
+    description: "Sistema corredizo de 2 y 4 hojas ideal para ventanas de dormitorios, baños y cocinas en viviendas unifamiliares. Perfiles ligeros con deslizamiento suave sobre riel de aluminio.",
     specs: {
       glass: "4mm a 6mm (Monolítico o Templado)",
-      width: "Perfiles de 50mm de ancho",
-      isolation: "Básico - felpas de polipropileno",
-      wind: "Hasta 80 km/h",
+      width: "50mm ancho de marco perimetral",
+      isolation: "Básico · Felpas de polipropileno",
+      wind: "Hasta 80 km/h de resistencia",
     },
-    use: "Ventanas corredizas pequeñas de dormitorios y baños.",
+    advantages: [
+      "Instalación rápida en vanos estándar",
+      "Mantenimiento mínimo y fácil limpieza",
+      "Coste-efectividad óptimo para obras residenciales",
+      "Compatibilidad con mallas mosquiteras",
+    ],
+    idealFor: "Ventanas pequeñas y medianas en casas y departamentos de hasta 3 pisos.",
     image: imgSerie20,
+    badgeText: "Económica & Funcional",
   },
   {
+    id: "s25",
     code: "S-25",
-    name: "Serie 25",
+    name: "Serie 25 Reforzada",
     category: "Residencial Confort",
+    tagline: "Mayor robustez y estanqueidad para mamparas y ventanales principales",
     icon: Maximize,
-    description: "Perfilería reforzada de gama media para ventanas y puertas corredizas de mayor envergadura. Excelente balance entre peso y resistencia.",
+    description: "Perfilería reforzada de gama media-alta para mamparas de sala, balcones y accesos. Soporta cristales de mayor peso con rodamiento regulable de suave desplazamiento.",
     specs: {
       glass: "6mm a 8mm (Templado o Laminado)",
-      width: "Perfiles de 62mm de ancho",
-      isolation: "Medio - felpas de alta densidad y jebes",
-      wind: "Hasta 100 km/h",
+      width: "62mm ancho de marco reforzado",
+      isolation: "Medio-Alto · Felpas densas y jebes",
+      wind: "Hasta 100 km/h de resistencia",
     },
-    use: "Mamparas corredizas de salas, balcones y accesos medianos.",
+    advantages: [
+      "Perfiles de mayor inercia que evitan pandeo",
+      "Carretillas con rodamientos reforzados",
+      "Cierres embutidos laterales de seguridad",
+      "Excelente relación calidad-precio para mamparas",
+    ],
+    idealFor: "Mamparas corredizas de salas, balcones y accesos a jardines.",
     image: imgVentanaAluminio,
+    badgeText: "La Más Instalada",
   },
   {
-    code: "S-35",
-    name: "Serie 35 / 38",
-    category: "Hermética Batiente",
+    id: "s35",
+    code: "Serie 35 / 38",
+    name: "Serie 38 Batiente Hermética",
+    category: "Acústica & Hermética",
+    tagline: "Máximo aislamiento contra ruido exterior y corrientes de aire frío",
     icon: Volume2,
-    description: "Sistema para ventanas batientes, proyectantes y oscilobatientes con doble contacto de jebe, ofreciendo un cierre altamente hermético.",
+    description: "Sistema para ventanas batientes, proyectantes y oscilobatientes con doble contacto de jebe EPDM. Crea un cierre a presión que bloquea el ruido del tráfico y el polvo.",
     specs: {
       glass: "6mm a 10mm (Templado o Acústico)",
-      width: "Perfiles de 40mm de ancho",
-      isolation: "Alto - doble burlete de EPDM (estanqueidad)",
-      wind: "Hasta 120 km/h",
+      width: "40mm ancho con doble burlete",
+      isolation: "Alto · Reducción acústica hasta 34 dB",
+      wind: "Hasta 120 km/h de resistencia",
     },
-    use: "Estudios, dormitorios y oficinas que requieran alta reducción de ruido.",
+    advantages: [
+      "Cierre hermético perimetral por compresión",
+      "Aislamiento térmico frente a heladas andinas",
+      "Apertura interior o exterior según necesidad",
+      "Herrajes multipunto europeos de alta seguridad",
+    ],
+    idealFor: "Dormitorios principales, salas de estudio, oficinas y clínicas con exigencia acústica.",
     image: imgDivisionesOficina,
+    badgeText: "Aislamiento Acústico",
   },
   {
-    code: "S-80",
-    name: "Serie 80 (Europea)",
-    category: "Premium Hermética",
+    id: "s80",
+    code: "Serie 80",
+    name: "Serie 80 Europea",
+    category: "Línea Premium",
+    tagline: "Ingeniería de vanguardia para grandes luces y doble acristalamiento (DVH)",
     icon: ShieldCheck,
-    description: "Sistema corredizo de alta gama y diseño europeo. Ideal para grandes luces, soportando cristales laminados gruesos o cámaras de aire (DVH).",
+    description: "Sistema corredizo de alta gama diseñado bajo estándares europeos. Permite paños vidriados gigantes de piso a techo con cámaras de aire aislantes termoacústicas.",
     specs: {
-      glass: "8mm a 20mm (Soporta Vidrio Doble - DVH)",
-      width: "Perfiles de 80mm de ancho",
-      isolation: "Muy Alto - termoacústico con empaques europeos",
-      wind: "Hasta 140 km/h",
+      glass: "8mm a 20mm (Vidrio Doble - DVH)",
+      width: "80mm ancho de marco multiproyecto",
+      isolation: "Muy Alto · Termoacústico certificado",
+      wind: "Hasta 140 km/h de resistencia",
     },
-    use: "Mamparas de terraza premium en casas de playa, campo o departamentos altos.",
+    advantages: [
+      "Capacidad para vidrios dobles con cámara de gas argón",
+      "Rodamientos de precisión para hojas de hasta 150 kg",
+      "Acabados anodizados europeos mate y titanio",
+      "Estética minimalista con máxima entrada de luz",
+    ],
+    idealFor: "Casas de campo, terrazas de departamentos duplex y arquitectura contemporánea.",
     image: imgHeroWindow,
+    badgeText: "Gama Alta / DVH",
   },
   {
-    code: "S-100",
-    name: "Serie 100 / Monumental",
-    category: "Alta Ingeniería",
+    id: "s100",
+    code: "Serie 100",
+    name: "Serie 100 / Muro Cortina",
+    category: "Ingeniería Monumental",
+    tagline: "Estructuras autoportantes de aluminio para edificios comerciales y fachadas",
     icon: Landmark,
-    description: "Sistemas estructurales monumentales de aluminio reforzado. Diseñados para resistir cargas de viento extremas y alturas elevadas.",
+    description: "Sistemas estructurales monumentales calculados para resistir cargas de viento extremas y alturas elevadas en edificios corporativos, clínicas y centros comerciales.",
     specs: {
-      glass: "10mm a 24mm (Cámaras DVH pesadas)",
-      width: "Perfiles de 100mm reforzados",
-      isolation: "Máximo - perfiles con cámaras múltiples aislantes",
-      wind: "Hasta 180 km/h (Estructural)",
+      glass: "10mm a 24mm (Laminados / DVH)",
+      width: "100mm perfiles estructurales pesados",
+      isolation: "Máximo · Desagüe y ventilación interna",
+      wind: "Hasta 180 km/h (Cálculo estructural)",
     },
-    use: "Edificios comerciales, fachadas integrales y mamparas de piso a techo gigantes.",
+    advantages: [
+      "Fachadas integrales sin marcos visibles exteriores",
+      "Anclajes estructurales de acero al carbono",
+      "Control de radiación solar y confort térmico",
+      "Cumplimiento del Reglamento Nacional de Edificaciones",
+    ],
+    idealFor: "Fachadas de edificios, concesionarios, clínicas y galerías comerciales.",
     image: imgCerramientoTerraza,
+    badgeText: "Monumental B2B",
   },
 ];
 
 export function Series() {
+  const [activeTab, setActiveTab] = useState("s25");
+
   return (
-    <section id="series" className="relative overflow-hidden border-b bg-transparent">
-      {/* Fondo decorativo con grilla sutil */}
+    <section id="series" className="relative overflow-hidden border-b bg-slate-50/60 py-16 sm:py-24">
       <div className="bg-grid pointer-events-none absolute inset-0 opacity-15" aria-hidden />
 
-      <div className="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-        {/* Encabezado de la sección unificado */}
-        <SectionHeader
-          badgeText="Sistemas de Perfilería"
-          title="Nuestras"
-          highlightTitle="Series de Aluminio"
-          description="Trabajamos con sistemas certificados y perfilería de diversas series diseñadas para adaptarse al peso, la luz y las exigencias termoacústicas de tu proyecto."
-          className="mb-12"
-        />
+      <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        
+        {/* Encabezado Monumental */}
+        <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-14 sm:mb-16">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-slate-950 font-sans leading-[1.06]">
+            Sistemas & Series de Perfilería
+          </h2>
+          <p className="mt-4 text-base sm:text-xl text-slate-600 font-medium leading-relaxed max-w-3xl">
+            Desde sistemas residenciales económicos hasta mamparas monumentales de alta gama con doble vidrio hermético.
+          </p>
+        </div>
 
-        {/* Grilla de Series */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {seriesList.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Card 
-                key={item.code} 
-                className="group relative flex flex-col justify-between overflow-hidden border border-border/80 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md"
-              >
-                {/* Contenedor de Imagen de la Serie */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
-                  <Image
-                    src={item.image}
-                    alt={`${item.name} - Carpintería de aluminio y ventanas en Huancayo - GMS Integra`}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-85" />
+        {/* Sistema de Pestañas Interactivas */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          
+          {/* Barra de Navegación de Tabs */}
+          <div className="flex justify-center mb-8">
+            <TabsList className="h-auto p-1.5 bg-white border border-slate-200 shadow-sm rounded-2xl flex flex-wrap justify-center gap-1.5 max-w-full">
+              {seriesData.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <TabsTrigger
+                    key={s.id}
+                    value={s.id}
+                    className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-xl px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 flex items-center gap-2 cursor-pointer"
+                  >
+                    <Icon className="size-4" />
+                    <span>{s.code}</span>
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
+          </div>
+
+          {/* Contenido de cada Tab */}
+          {seriesData.map((s) => (
+            <TabsContent key={s.id} value={s.id} className="focus:outline-none">
+              <div className="bg-white border border-slate-200/90 rounded-3xl shadow-md overflow-hidden p-6 sm:p-8 lg:p-10">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                   
-                  {/* Código Flotante Sólido */}
-                  <div className="absolute top-3 right-3 z-10 bg-primary text-white text-xs font-bold font-mono px-2.5 py-1 rounded-md shadow-xs">
-                    {item.code}
-                  </div>
-
-                  {/* Icono Flotante */}
-                  <div className="absolute bottom-3 left-3 bg-white text-primary flex size-8.5 items-center justify-center rounded-lg border border-border shadow-xs">
-                    <Icon className="size-4.5 transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                </div>
-
-                <CardHeader className="flex flex-col gap-1.5 pt-4 px-6">
-                  <div className="flex flex-col">
-                    <CardTitle className="text-base font-extrabold uppercase tracking-wider text-foreground">
-                      {item.name}
-                    </CardTitle>
-                    <span className="text-[10px] font-bold text-primary uppercase tracking-wider mt-0.5">
-                      {item.category}
-                    </span>
-                  </div>
-
-                  <CardDescription className="text-muted-foreground text-xs leading-relaxed mt-2 line-clamp-3 min-h-[48px] normal-case font-normal">
-                    {item.description}
-                  </CardDescription>
-                </CardHeader>
-
-                <CardContent className="flex-1 px-6">
-                  {/* Ficha técnica del sistema */}
-                  <div className="border-t border-dashed border-border/80 pt-4 flex flex-col gap-2.5">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
-                      Ficha técnica del sistema:
-                    </span>
-                    <div className="grid grid-cols-2 gap-y-2 gap-x-1.5 text-[11px]">
-                      <div className="flex flex-col">
-                        <span className="text-muted-foreground font-medium">Cristal compatible</span>
-                        <span className="font-semibold text-foreground truncate font-mono text-[11px]" title={item.specs.glass}>
-                          {item.specs.glass}
+                  {/* Columna Izquierda: Ficha Técnica (7 cols) */}
+                  <div className="lg:col-span-7 flex flex-col gap-6">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="bg-primary text-white text-xs font-black font-mono px-3 py-1 rounded-lg">
+                          {s.code}
+                        </span>
+                        <span className="text-xs font-bold text-primary uppercase tracking-wider">
+                          {s.category}
+                        </span>
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full ml-auto">
+                          {s.badgeText}
                         </span>
                       </div>
-                      <div className="flex flex-col">
-                        <span className="text-muted-foreground font-medium">Ancho perimetral</span>
-                        <span className="font-semibold text-foreground font-mono text-[11px]">
-                          {item.specs.width}
-                        </span>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-muted-foreground font-medium">Hermeticidad</span>
-                        <span className="font-semibold text-foreground truncate text-[11px]" title={item.specs.isolation}>
-                          {item.specs.isolation}
-                        </span>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-muted-foreground font-medium">Resistencia viento</span>
-                        <span className="font-semibold text-foreground font-mono text-[11px]">
-                          {item.specs.wind}
-                        </span>
-                      </div>
-                    </div>
 
-                    <div className="bg-primary/5 border border-primary/10 rounded-md p-2 mt-2">
-                      <span className="text-[10px] font-bold text-primary block uppercase tracking-wide">
-                        Uso recomendado:
-                      </span>
-                      <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5 normal-case font-normal">
-                        {item.use}
+                      <h3 className="text-2xl sm:text-3xl font-black uppercase text-slate-900 tracking-tight">
+                        {s.name}
+                      </h3>
+                      
+                      <p className="text-sm font-semibold text-slate-700 mt-1">
+                        {s.tagline}
+                      </p>
+
+                      <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mt-3 font-normal">
+                        {s.description}
                       </p>
                     </div>
-                  </div>
-                </CardContent>
 
-                <CardFooter className="pt-2 px-6 pb-6 mt-2">
-                  <Button variant="brand" className="group/btn w-full justify-between text-xs font-bold uppercase tracking-wider h-9 rounded-lg shadow-sm" asChild>
-                    <a
-                      href={`https://wa.me/51958413806?text=${encodeURIComponent(`Hola GMS Integra, quisiera consultar la factibilidad y cotización para la ${item.name} (${item.code})`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Consultar por WhatsApp
-                      <ArrowRight className="size-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                    </a>
-                  </Button>
-                </CardFooter>
-              </Card>
-            );
-          })}
-        </div>
+                    {/* Grilla de 4 Especificaciones Técnicas */}
+                    <div className="grid grid-cols-2 gap-3 bg-slate-50 border border-slate-100 rounded-2xl p-4">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Cristal Compatible</span>
+                        <span className="text-xs font-bold text-slate-900 font-mono mt-0.5">{s.specs.glass}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Ancho Marco</span>
+                        <span className="text-xs font-bold text-slate-900 font-mono mt-0.5">{s.specs.width}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Aislamiento</span>
+                        <span className="text-xs font-bold text-slate-900 mt-0.5">{s.specs.isolation}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Resistencia Viento</span>
+                        <span className="text-xs font-bold text-slate-900 font-mono mt-0.5">{s.specs.wind}</span>
+                      </div>
+                    </div>
+
+                    {/* Ventajas Clave */}
+                    <div>
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-900 block mb-2.5">
+                        Ventajas de fabricación e instalación:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {s.advantages.map((adv, idx) => (
+                          <div key={idx} className="flex items-start gap-2 text-xs text-slate-700 font-medium">
+                            <CheckCircle2 className="size-4 text-emerald-600 shrink-0 mt-0.5" />
+                            <span>{adv}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Uso Recomendado y Botón CTA */}
+                    <div className="border-t border-slate-100 pt-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-primary block">
+                          Aplicación principal:
+                        </span>
+                        <p className="text-xs text-slate-600 font-medium">
+                          {s.idealFor}
+                        </p>
+                      </div>
+
+                      <Button
+                        variant="brand"
+                        className="w-full sm:w-auto h-11 px-6 text-xs font-bold uppercase tracking-wider bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-xs gap-2 shrink-0"
+                        asChild
+                      >
+                        <a
+                          href={`https://wa.me/51958413806?text=${encodeURIComponent(`Hola GMS Integra, me interesa cotizar una instalación con ${s.name} (${s.code}). ¿Podrían darme presupuesto?`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <span>Cotizar {s.code}</span>
+                          <ArrowRight className="size-4" />
+                        </a>
+                      </Button>
+                    </div>
+
+                  </div>
+
+                  {/* Columna Derecha: Imagen de Serie con Marco de Taller (5 cols) */}
+                  <div className="lg:col-span-5">
+                    <div className="relative aspect-[4/3] sm:aspect-[1/1] w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shadow-md group">
+                      <Image
+                        src={s.image}
+                        alt={`${s.name} - Carpintería de aluminio en Huancayo`}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        sizes="(max-width: 1024px) 100vw, 40vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none" />
+                      
+                      {/* Badge inferior en imagen */}
+                      <div className="absolute bottom-4 left-4 right-4 text-white">
+                        <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#00c9ff]">
+                          GMS Taller Certificado
+                        </p>
+                        <p className="text-sm font-black uppercase tracking-wide">
+                          {s.name}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </TabsContent>
+          ))}
+
+        </Tabs>
+
       </div>
     </section>
   );
 }
+

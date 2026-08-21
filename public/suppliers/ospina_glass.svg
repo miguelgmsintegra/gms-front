@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <rect width="200" height="48" rx="4" fill="#0B132B"/>
+  <path d="M16 12L28 12L34 24L28 36L16 36L10 24Z" fill="#00C9FF" fill-opacity="0.2" stroke="#00C9FF" stroke-width="2"/>
+  <text x="44" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="900" fill="#FFFFFF" letter-spacing="1.5">OSPINA</text>
+  <text x="136" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#00C9FF" letter-spacing="2">GLASS</text>
+</svg>
