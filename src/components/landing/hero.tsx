@@ -1,175 +1,244 @@
 "use client";
 
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { ShieldCheck, Award, Wrench, ArrowRight, CheckCircle2 } from "lucide-react";
-import heroWindow from "@/assets/hero-window.jpg";
-import mamparaBano from "@/assets/mampara_bano.jpg";
-import ventanaAluminio from "@/assets/ventana_aluminio.jpg";
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { WhatsAppIcon } from "./social-icons";
+
+import imgMampara from "@/assets/mampara_monumental_terraza.jpg";
+import imgBano from "@/assets/bano_spa_vidrio_templado.jpg";
+import imgFachada from "@/assets/fachada_muro_cortina.jpg";
+import imgVentana from "@/assets/cerramiento_terraza.jpg";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
-const stats = [
-  { value: "+15", label: "Años en el Rubro de Construcción" },
-  { value: "+1.200", label: "Obras y Proyectos Entregados" },
-  { value: "5 Años", label: "Garantía Escrita de Instalación" },
-];
+const SLIDE_DURATION_MS = 12000;
 
-const highlights = [
-  "Fabricación en taller propio",
-  "Vidrio templado de seguridad",
-  "Medición técnica a domicilio",
+const SLIDES = [
+  {
+    id: "mamparas",
+    title: "Mamparas Panorámicas Serie 80",
+    subtitle:
+      "Vanos monumentales piso a techo con cristal templado de 8mm a 10mm, perfiles pesados de aluminio y rodaje de alta resistencia.",
+    spec: "1 Año de Garantía Escrita · Huancayo",
+    image: imgMampara,
+    waMessage:
+      "Hola GMS Integra, solicito cotización para Mamparas Monumentales Serie 80 en Huancayo.",
+  },
+  {
+    id: "banos",
+    title: "Línea Spazio en Acero Quirúrgico",
+    subtitle:
+      "Divisiones y puertas de ducha con herrajes y perfiles en acero inoxidable 304 de seguridad, sellado hermético contra filtraciones.",
+    spec: "Acero Inox 304 · Cristal Templado 8mm",
+    image: imgBano,
+    waMessage:
+      "Hola GMS Integra, solicito cotización para Mamparas de Baño Línea Spazio en Huancayo.",
+  },
+  {
+    id: "fachadas",
+    title: "Muros Cortina & Fachadas Integrales",
+    subtitle:
+      "Ingeniería estructural en vidrio laminado y templado con silicona estructural para edificios comerciales y residenciales.",
+    spec: "Cristal Laminado 4+4 / 5+5 · Control Solar",
+    image: imgFachada,
+    waMessage:
+      "Hola GMS Integra, solicito cotización para Muros Cortina en Huancayo.",
+  },
+  {
+    id: "ventanas",
+    title: "Ventanas Herméticas Serie 20 / 25 / 38",
+    subtitle:
+      "Corte milimétrico por matriz con felpa perimetral y empaque EPDM para tolerancia cero al frío, viento y ruido exterior.",
+    spec: "Aislamiento Acústico y Térmico EPDM",
+    image: imgVentana,
+    waMessage:
+      "Hola GMS Integra, solicito cotización para Ventanas Herméticas en Huancayo.",
+  },
 ];
 
 export function Hero() {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const current = SLIDES[activeIdx];
+
+  const nextSlide = useCallback(() => {
+    setActiveIdx((prev) => (prev === SLIDES.length - 1 ? 0 : prev + 1));
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setActiveIdx((prev) => (prev === 0 ? SLIDES.length - 1 : prev - 1));
+  }, []);
+
+  // Temporizador de 12 segundos para cambio de página automático
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nextSlide();
+    }, SLIDE_DURATION_MS);
+
+    return () => clearInterval(timer);
+  }, [nextSlide, activeIdx]);
+
   return (
-    <section id="inicio" className="relative min-h-[85vh] flex flex-col justify-center overflow-hidden border-b bg-transparent py-8 lg:py-16">
-      {/* Grilla geométrica sutil (líneas de arquitectura y perfiles) */}
-      <div className="bg-grid pointer-events-none absolute inset-0 opacity-25 z-0" aria-hidden />
+    <section
+      id="inicio"
+      className="relative bg-background text-foreground border-b border-border overflow-hidden"
+    >
+      {/* Estilo para la animación lineal suave de 12 segundos */}
+      <style>{`
+        @keyframes gmsSlideProgress {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+        .animate-gms-progress {
+          animation: gmsSlideProgress ${SLIDE_DURATION_MS}ms linear forwards;
+        }
+      `}</style>
 
-      <div className="relative mx-auto z-10 w-full max-w-6xl px-4 sm:px-6 lg:px-8 flex flex-col gap-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-          
-          {/* Columna Izquierda: Contenido de Texto */}
-          <div className="lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-left gap-6">
-            
-            {/* Badge de Rubro */}
-            <Badge variant="outline-brand" className="w-fit gap-1.5 px-3 py-1">
-              <Wrench className="size-3.5" />
-              Carpintería de Aluminio & Vidrio Templado
-            </Badge>
-            
-            {/* Titular Principal en Mayúsculas de Alta Jerarquía */}
-            <h1 className="text-3xl sm:text-5xl lg:text-5xl font-extrabold tracking-wider uppercase leading-[1.12] text-foreground">
-              Ventanas y Mamparas de Aluminio,{" "}
-              <span className="text-primary font-extrabold uppercase">a la Medida</span> de tu Edificación.
+      {/* Escenario Slider Principal */}
+      <div className="relative min-h-[560px] lg:min-h-[640px] w-full flex items-center justify-between">
+        <div className="absolute inset-0 size-full z-0">
+          <Image
+            src={current.image}
+            alt={`${current.title} - GMS Integra`}
+            priority
+            className="size-full object-cover object-center transition-all duration-700 brightness-[0.88]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/45 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-transparent to-black/15" />
+        </div>
+
+        <div className="relative z-20 mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+          <div className="max-w-3xl text-left">
+            <h1 className="text-4xl sm:text-6xl lg:text-[4.2rem] font-black uppercase tracking-tight text-white leading-[1.02] font-sans drop-shadow-[2px_3px_6px_rgba(0,0,0,0.4)]">
+              {current.title}
             </h1>
-            
-            {/* Bajada Descriptiva */}
-            <p className="text-muted-foreground max-w-xl text-base sm:text-lg text-balance leading-relaxed normal-case font-normal">
-              Diseño, fabricación e instalación de alta ingeniería arquitectónica en carpintería metálica, mamparas de cristal templado, ventanas herméticas y fachadas integrales en Huancayo y todo el Valle del Mantaro.
+            <p className="mt-6 text-base sm:text-lg lg:text-xl text-slate-100 font-normal leading-relaxed max-w-2xl drop-shadow-[1px_2px_4px_rgba(0,0,0,0.4)]">
+              {current.subtitle}
             </p>
-
-            {/* Balazos de Valor en Construcción */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-semibold text-foreground">
-              {highlights.map((item) => (
-                <span key={item} className="flex items-center gap-1.5 bg-card/80 border border-border px-3 py-1.5 rounded-full shadow-xs">
-                  <CheckCircle2 className="size-3.5 text-primary" />
-                  {item}
-                </span>
-              ))}
-            </div>
-
-            {/* Botones de Acción Sólidos */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mt-2">
-              <Button variant="brand" size="lg" className="h-12 px-8 text-xs font-bold uppercase tracking-wider shadow-md gap-2 bg-emerald-600 hover:bg-emerald-700 text-white" asChild>
+            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <Button
+                size="lg"
+                className="h-14 px-10 text-sm font-bold uppercase tracking-wider bg-primary hover:bg-primary/90 text-primary-foreground rounded shadow-cta gap-2.5 transition-all cursor-pointer active:translate-y-1"
+                asChild
+              >
                 <a
-                  href={`https://wa.me/51958413806?text=${encodeURIComponent("Hola GMS Integra, quisiera solicitar una cotización de obra para un proyecto de aluminio y vidrio.")}`}
+                  href={`https://wa.me/51958413806?text=${encodeURIComponent(current.waMessage)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Cotizar por WhatsApp
+                  <WhatsAppIcon className="size-5" />
+                  <span>Cotizar esta Línea</span>
                   <ArrowRight className="size-4" />
                 </a>
               </Button>
-              <Button variant="outline" size="lg" className="h-12 px-7 text-xs font-semibold uppercase tracking-wider" asChild>
-                <a href="#contacto">Ver Formulario Web</a>
-              </Button>
             </div>
           </div>
-
-          {/* Columna Derecha: Mosaico Arquitectónico de Alta Jerarquía Visual */}
-          <div className="lg:col-span-6 w-full flex justify-center items-center">
-            <div className="relative w-full max-w-lg lg:max-w-none">
-              
-              {/* Tarjeta Principal (Fachadas y Ventanales de Gran Luces) */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border-2 border-primary/20 bg-card p-2 shadow-2xl transition-all duration-500 hover:border-primary/40">
-                <div className="relative h-full w-full overflow-hidden rounded-xl bg-muted">
-                  <Image
-                    src={heroWindow}
-                    alt="Ventanas y mamparas de aluminio y vidrio templado en Huancayo - GMS Integra"
-                    fill
-                    className="object-cover transition-transform duration-700 hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 45vw"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                  
-                  {/* Etiqueta Flotante en la Imagen Principal */}
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-primary-foreground/80">Especialidad Principal</p>
-                      <p className="text-sm font-extrabold uppercase tracking-wide">Fachadas & Ventanales Herméticos</p>
-                    </div>
-                    <Badge variant="brand" className="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 shadow-sm">
-                      GMS Pro
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tarjeta Flotante Superior Derecha (Mamparas de Baño en Cristal Templado) */}
-              <div className="absolute -top-5 -right-4 sm:-right-6 w-44 sm:w-52 aspect-[4/3] overflow-hidden rounded-xl border-2 border-white bg-card p-1.5 shadow-xl transition-all duration-300 hover:scale-105 hidden sm:block">
-                <div className="relative h-full w-full overflow-hidden rounded-lg">
-                  <Image
-                    src={mamparaBano}
-                    alt="Mampara de baño en vidrio templado en Huancayo"
-                    fill
-                    className="object-cover"
-                    sizes="200px"
-                  />
-                  <div className="absolute inset-0 bg-black/40" />
-                  <div className="absolute bottom-2 left-2 text-white">
-                    <p className="text-[9px] font-extrabold uppercase tracking-wider">Mamparas de Baño</p>
-                    <p className="text-[8px] text-white/80 font-mono">Vidrio Templado 10mm</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tarjeta Flotante Inferior Izquierda (Carpintería de Aluminio Serie Nova) */}
-              <div className="absolute -bottom-6 -left-4 sm:-left-6 w-48 sm:w-56 aspect-[4/3] overflow-hidden rounded-xl border-2 border-white bg-card p-1.5 shadow-xl transition-all duration-300 hover:scale-105 hidden sm:block">
-                <div className="relative h-full w-full overflow-hidden rounded-lg">
-                  <Image
-                    src={ventanaAluminio}
-                    alt="Ventanas de aluminio Serie Nova en Huancayo"
-                    fill
-                    className="object-cover"
-                    sizes="220px"
-                  />
-                  <div className="absolute inset-0 bg-black/40" />
-                  <div className="absolute bottom-2 left-2 text-white">
-                    <p className="text-[9px] font-extrabold uppercase tracking-wider">Ventanas Serie 38 / Nova</p>
-                    <p className="text-[8px] text-white/80 font-mono">Acabado Anodizado Negro</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Sello de Garantía y Confianza */}
-              <div className="absolute -bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-xl shadow-lg border border-primary/20 flex items-center gap-2.5 z-20">
-                <Award className="size-5 shrink-0 text-white" />
-                <div className="leading-tight">
-                  <p className="text-[10px] font-extrabold uppercase tracking-wider">Garantía Escrita</p>
-                  <p className="text-[9px] text-white/90">5 Años en Taller & Obra</p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
         </div>
 
-        {/* Métricas Estadísticas de Construcción */}
-        <div className="w-full border-t border-border/80 pt-8 mt-6">
-          <dl className="mx-auto flex max-w-4xl flex-wrap justify-around gap-x-8 gap-y-4">
-            {stats.map((s) => (
-              <div key={s.label} className="flex flex-col items-center text-center">
-                <dt className="text-primary text-3xl sm:text-4xl font-extrabold tracking-tight font-mono tabular-nums">{s.value}</dt>
-                <dd className="text-muted-foreground text-[10px] sm:text-xs mt-1 font-bold uppercase tracking-wider">{s.label}</dd>
-              </div>
-            ))}
-          </dl>
+        <div className="hidden sm:flex absolute right-8 bottom-28 z-30 items-center gap-2">
+          <button
+            onClick={prevSlide}
+            aria-label="Slide anterior"
+            className="size-11 rounded border border-white/30 bg-background/60 hover:bg-primary text-foreground hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          >
+            <ChevronLeft className="size-5" />
+          </button>
+          <button
+            onClick={nextSlide}
+            aria-label="Slide siguiente"
+            className="size-11 rounded border border-white/30 bg-background/60 hover:bg-primary text-foreground hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          >
+            <ChevronRight className="size-5" />
+          </button>
         </div>
+      </div>
 
+      {/* Línea de Progreso */}
+      <div className="relative z-30 w-full h-[3px] bg-border/40 overflow-hidden">
+        <div
+          key={activeIdx}
+          className="h-full bg-primary animate-gms-progress"
+        />
+      </div>
+
+      {/* Galería Inferior de Miniaturas */}
+      <div className="relative z-30 bg-background/95 px-4 sm:px-6 lg:px-8 py-3">
+        <div className="mx-auto max-w-7xl grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {SLIDES.map((slide, idx) => {
+            const isActive = idx === activeIdx;
+            return (
+              <button
+                key={slide.id}
+                onClick={() => setActiveIdx(idx)}
+                className={`relative overflow-hidden p-2.5 rounded border text-left transition-all flex items-center gap-3 cursor-pointer ${
+                  isActive
+                    ? "border-primary bg-accent shadow-xs"
+                    : "border-border bg-secondary/50 hover:bg-secondary hover:border-border"
+                }`}
+              >
+                <div className="relative size-11 rounded overflow-hidden bg-muted shrink-0">
+                  <Image
+                    src={slide.image}
+                    alt={slide.title}
+                    className="size-full object-cover"
+                  />
+                  {isActive && (
+                    <div className="absolute inset-0 bg-primary/10 border-2 border-primary rounded" />
+                  )}
+                </div>
+                <div className="overflow-hidden">
+                  <span className="text-[10px] font-mono text-primary font-bold block">
+                    {`0${idx + 1} //`}
+                  </span>
+                  <span className="text-xs font-bold text-foreground uppercase truncate block">
+                    {slide.title.split(" ")[0]} {slide.title.split(" ")[1] || ""}
+                  </span>
+                </div>
+
+                {isActive && (
+                  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary/20 overflow-hidden">
+                    <div
+                      key={activeIdx}
+                      className="h-full bg-primary animate-gms-progress"
+                    />
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
