@@ -10,61 +10,78 @@
    (radio 6px), gradiente azul→cian como acento de luz.
    ============================================================ */
 :root {
-  --radius: 0.375rem;
+  --radius: 0.25rem;
 
-  /* Gradiente de marca — "luz atravesando el vidrio" */
+  /* Gradiente de marca — "luz atravesando el cristal" */
   --gradient-brand: linear-gradient(135deg, #004aad 0%, #00c9ff 100%);
+  --gradient-luminous: linear-gradient(135deg, #004aad 0%, #00d2ff 60%, #10b981 100%);
 
-  /* Base / superficies (blanco frío como luz ambiente; cards blanco puro) */
-  --background: #f7f9fc;
-  --foreground: oklch(0.18 0.015 258);
+  /* Base / superficies — dirección "Aluminio Estructural" */
+  --background: #F4F6F9;
+  --foreground: #090d16;
   --card: #ffffff;
-  --card-foreground: oklch(0.18 0.015 258);
+  --card-foreground: #090d16;
   --popover: #ffffff;
-  --popover-foreground: oklch(0.18 0.015 258);
+  --popover-foreground: #090d16;
 
-  /* MARCA — Primary = azul GMS #004AAD */
+  /* MARCA — Primary = azul GMS vibrante #004AAD */
   --primary: #004aad;
   --primary-foreground: #ffffff;
 
-  /* Neutros gris-frío (aluminio) */
-  --secondary: oklch(0.965 0.006 250);
-  --secondary-foreground: oklch(0.24 0.02 258);
-  --muted: oklch(0.965 0.006 250);
-  --muted-foreground: oklch(0.55 0.018 255);
-  --accent: oklch(0.965 0.008 250);
-  --accent-foreground: oklch(0.24 0.02 258);
+  /* Neutros blanco-aluminio (luz y superficies claras) */
+  --secondary: #f4f8fc;
+  --secondary-foreground: #090d16;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --accent: #edf5ff;
+  --accent-foreground: #004aad;
 
-  /* Estados */
-  --destructive: #dc2626;
-  --success: #16a34a;
+  /* Estados brillantes */
+  --destructive: #ef4444;
+  --success: #10b981;
   --warning: #f59e0b;
 
-  /* MARCA extra — cian del gradiente (acentos) */
+  /* MARCA extra — cian radiante y azul eléctrico */
   --brand: #00c9ff;
-  --brand-soft: #41c1f8;
+  --brand-soft: #38bdf8;
 
-  /* Bordes / inputs / foco (marco de aluminio: fino y frío) */
-  --border: oklch(0.91 0.008 250);
-  --input: oklch(0.91 0.008 250);
+  /* Bordes / marco de aluminio anodizado pulido */
+  --border: oklch(0.92 0.008 250);
+  --input: oklch(0.92 0.008 250);
   --ring: #004aad;
 
-  /* Charts — paleta de marca */
+  /* Charts — paleta luminosa */
   --chart-1: #004aad;
   --chart-2: #00c9ff;
-  --chart-3: #41c1f8;
-  --chart-4: #16a34a;
+  --chart-3: #38bdf8;
+  --chart-4: #10b981;
   --chart-5: #f59e0b;
 
   /* Sidebar */
-  --sidebar: #fbfcfe;
-  --sidebar-foreground: oklch(0.18 0.015 258);
+  --sidebar: #ffffff;
+  --sidebar-foreground: #090d16;
   --sidebar-primary: #004aad;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: oklch(0.965 0.008 250);
-  --sidebar-accent-foreground: oklch(0.24 0.02 258);
-  --sidebar-border: oklch(0.91 0.008 250);
+  --sidebar-accent: #f4f8fc;
+  --sidebar-accent-foreground: #004aad;
+  --sidebar-border: oklch(0.92 0.008 250);
   --sidebar-ring: #004aad;
+
+  /* ── Tokens "Aluminio Estructural" (Sesión 10) ── */
+  /* Azul acero oscuro — secciones hero oscuro, footer, bandas de contraste */
+  --steel: #1A2B45;
+  --steel-light: #243650;
+
+  /* Variaciones de primary para interacción precisa */
+  --primary-dark: #003282;
+  --primary-light: #E8F0FD;
+
+  /* Sombra sólida desplazada — botón industrial con presión física */
+  --shadow-cta: 0 4px 0px #003282;
+
+  /* Sombra de tarjeta — elevación real, sin vidrio */
+  --shadow-card: 0 1px 4px rgba(0,0,0,0.08), 0 4px 12px rgba(0,74,173,0.06);
+  --shadow-raised: 0 2px 8px rgba(0,0,0,0.10), 0 8px 24px rgba(0,74,173,0.10);
 }
 
 /* Nota: proyecto en MODO CLARO únicamente. Se conserva `@custom-variant dark`
@@ -126,6 +143,12 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Tokens "Aluminio Estructural" — expuestos como utilidades Tailwind */
+  --color-steel: var(--steel);
+  --color-steel-light: var(--steel-light);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
 }
 
 /* ============================================================
@@ -202,45 +225,65 @@
 }
 
 /* ============================================================
-   Efecto de Aurora Boreal (Mesh Gradients Animados)
+   Utilidades "Aluminio Estructural" (Sesión 10)
+   Reemplazan las auroras eliminadas. Diseño industrial:
+   diagonales, bordes de acento, sombras sólidas.
    ============================================================ */
-@keyframes aurora-blob-1 {
-  0%, 100% { transform: translate(0px, 0px) scale(1); }
-  33% { transform: translate(60px, -80px) scale(1.2); }
-  66% { transform: translate(-40px, 50px) scale(0.85); }
+
+/* Acento vertical de marca — línea izquierda azul en tarjetas/ítems */
+@utility border-accent-left {
+  border-left: 3px solid var(--primary);
+  padding-left: 0.75rem;
 }
 
-@keyframes aurora-blob-2 {
-  0%, 100% { transform: translate(0px, 0px) scale(1); }
-  50% { transform: translate(-80px, 60px) scale(1.2); }
+/* Banda diagonal leve — para secciones alternadas con ángulo industrial */
+@utility clip-diagonal-right {
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+}
+@utility clip-diagonal-left {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 85%);
 }
 
-@keyframes aurora-blob-3 {
-  0%, 100% { transform: translate(0px, 0px) scale(1); }
-  40% { transform: translate(70px, 90px) scale(0.9); }
-  80% { transform: translate(-40px, -50px) scale(1.15); }
+/* Sombra de tarjeta industrial — elevación real sin vidrio */
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+@utility shadow-raised {
+  box-shadow: var(--shadow-raised);
 }
 
-/* El movimiento se detiene para quien ha pedido menos animación en su sistema: son
-   superficies enormes y desenfocadas, justo el tipo de movimiento periférico que
-   provoca mareo a quien es sensible a él. La composición de color no cambia. */
-@utility animate-aurora-1 {
-  animation: aurora-blob-1 25s ease-in-out infinite;
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
+/* Botón CTA con presión física sólida */
+@utility shadow-cta {
+  box-shadow: var(--shadow-cta);
+  &:active {
+    box-shadow: none;
+    transform: translateY(4px);
   }
 }
 
-@utility animate-aurora-2 {
-  animation: aurora-blob-2 30s ease-in-out infinite;
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
+/* Fondo acero — secciones oscuras de contraste (CTA strip, footer) */
+@utility bg-steel {
+  background-color: var(--steel);
+  color: #ffffff;
+}
+@utility bg-primary-light {
+  background-color: var(--primary-light);
+}
+
+/* ============================================================
+   Animación de Ticker Cinético (Marquee Infinito de Marcas/Normas)
+   ============================================================ */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@utility animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+  &:hover {
+    animation-play-state: paused;
   }
 }
 
-@utility animate-aurora-3 {
-  animation: aurora-blob-3 28s ease-in-out infinite;
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-}
