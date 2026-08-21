@@ -17,7 +17,7 @@ import { Card, CardContent } from "@/components/ui/card";
  * del backend, y a quien está delante no le sirven: lo que necesita es saber si debe
  * reintentar o llamar a alguien. El detalle va a la consola, donde lo lee quien depura.
  *
- * ⚠️ Next 16: el segundo parámetro es `unstable_retry`, no el `reset` de versiones
+ * [AVISO] Next 16: el segundo parámetro es `unstable_retry`, no el `reset` de versiones
  * anteriores (ver `node_modules/next/dist/docs/.../file-conventions/error.md`).
  */
 export default function Error({

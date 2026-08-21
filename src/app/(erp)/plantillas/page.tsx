@@ -30,7 +30,7 @@ type Diseno = {
 /**
  * El repositorio de tipos de un diseño.
  *
- * ⚠️ Limitación conocida: hoy solo se muestra el PRIMER diseño que devuelve la API.
+ * [AVISO] Limitación conocida: hoy solo se muestra el PRIMER diseño que devuelve la API.
  * Mientras exista un único diseño (Puente Escondido) el resultado es correcto, pero en
  * cuanto entre el segundo esta página tapará uno sin avisar. El selector de diseño está
  * planificado; no se improvisa aquí porque implica decidir el criterio de clasificación

@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 /**
  * Proxy (lo que hasta Next 15 se llamaba Middleware).
  *
- * ⚠️ ESTO NO ES LA AUTORIZACIÓN DEL SISTEMA. Es un chequeo *optimista*: mira si existe
+ * [AVISO] ESTO NO ES LA AUTORIZACIÓN DEL SISTEMA. Es un chequeo *optimista*: mira si existe
  * la cookie de sesión y redirige en consecuencia, para que el usuario no vea el
  * esqueleto de una página protegida antes de rebotar. Nada más.
  *
