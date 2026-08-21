@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <rect width="200" height="48" rx="4" fill="#0F172A"/>
+  <path d="M12 24L22 14L28 18L24 28L12 24Z" fill="#3B82F6"/>
+  <text x="38" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="900" fill="#FFFFFF" letter-spacing="1">CÓNDOR</text>
+  <text x="126" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#94A3B8" letter-spacing="1">HNOS.</text>
+</svg>
